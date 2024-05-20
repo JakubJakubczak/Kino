@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Kino.Models.Sean>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TerminRozpoczecia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TerminZakonczenia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WolneMiejsca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalaNumerSali)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FilmIdFilmNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TerminRozpoczecia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TerminZakonczenia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WolneMiejsca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalaNumerSali)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FilmIdFilmNavigation.IdFilm)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdSeans">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdSeans">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdSeans">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
