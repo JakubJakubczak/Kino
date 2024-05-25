@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Kino.Data;
 using Kino.Models;
+using System.Drawing;
 
 namespace Kino.Controllers
 {
@@ -48,7 +49,8 @@ namespace Kino.Controllers
         // GET: Seans/Create
         public IActionResult Create()
         {
-            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "IdFilm");
+            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "Tytul");
+            ViewData["SalaNumerSali"] = new SelectList(_context.Salas, "NumerSali", "NumerSali"); // Assuming "NumerSali" is the property you want to display
             return View();
         }
 
@@ -57,15 +59,34 @@ namespace Kino.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdSeans,TerminRozpoczecia,TerminZakonczenia,WolneMiejsca,FilmIdFilm,SalaNumerSali")] Sean sean)
+        public async Task<IActionResult> Create([Bind("TerminRozpoczecia,TerminZakonczenia,FilmIdFilm,SalaNumerSali")] Sean sean)
         {
             if (ModelState.IsValid)
             {
+                var sala = _context.Salas.FirstOrDefault(s => s.NumerSali == sean.SalaNumerSali);
+                var film = await _context.Films.FindAsync(sean.FilmIdFilm);
+                if (sala != null)
+                {
+                    sean.WolneMiejsca = sala.LiczbaMiejsc;
+                }
+                if (film != null)
+                {
+                    sean.FilmIdFilmNavigation = film;
+                }
                 _context.Add(sean);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "IdFilm", sean.FilmIdFilm);
+            
+            // Inspect the validation errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            foreach (var error in errors)
+            {
+                Console.WriteLine(error.ErrorMessage);
+            }
+            
+            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "Tytul", sean.FilmIdFilm);
+            ViewData["SalaNumerSali"] = new SelectList(_context.Salas, "NumerSali", "NumerSali", sean.SalaNumerSali); // Assuming "NumerSali" is the property you want to display
             return View(sean);
         }
 
@@ -82,7 +103,7 @@ namespace Kino.Controllers
             {
                 return NotFound();
             }
-            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "IdFilm", sean.FilmIdFilm);
+            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "Tytul", sean.FilmIdFilm);
             return View(sean);
         }
 
@@ -118,7 +139,7 @@ namespace Kino.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "IdFilm", sean.FilmIdFilm);
+            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "Tytul", sean.FilmIdFilm);
             return View(sean);
         }
 

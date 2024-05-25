@@ -25,6 +25,12 @@ namespace Kino.Controllers
             return View(await _context.Films.ToListAsync());
         }
 
+        // GET: Films
+        public async Task<IActionResult> IndexRepertuar()
+        {
+            return View(await _context.Films.ToListAsync());
+        }
+
         // GET: Films/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -34,6 +40,24 @@ namespace Kino.Controllers
             }
 
             var film = await _context.Films
+                .FirstOrDefaultAsync(m => m.IdFilm == id);
+            if (film == null)
+            {
+                return NotFound();
+            }
+
+            return View(film);
+        }
+
+        public async Task<IActionResult> WyswietlSeanse(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var film = await _context.Films
+                 .Include(f => f.Seans)
                 .FirstOrDefaultAsync(m => m.IdFilm == id);
             if (film == null)
             {

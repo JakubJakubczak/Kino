@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Kino.Models.Film>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista filmów</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Tytul)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImieNazwiskoRezysera)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RokWydania)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.KrajProdukcji)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Opis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CzasTrwania)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tytul)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImieNazwiskoRezysera)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RokWydania)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KrajProdukcji)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Opis)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CzasTrwania)
+                </td>
+                <td>
+                <a asp-action="WyswietlSeanse" asp-route-id="@item.IdFilm">Zobacz seanse</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

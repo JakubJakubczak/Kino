@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.FilmIdFilm)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TerminRozpoczecia)
             </th>
             <th>
@@ -24,15 +27,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.SalaNumerSali)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FilmIdFilmNavigation)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FilmIdFilmNavigation.Tytul)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TerminRozpoczecia)
             </td>
@@ -44,9 +47,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SalaNumerSali)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FilmIdFilmNavigation.IdFilm)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdSeans">Edit</a> |
