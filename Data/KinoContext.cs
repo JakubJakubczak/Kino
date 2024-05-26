@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Kino.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace Kino.Data;
 
-public partial class KinoContext : DbContext
+public partial class KinoContext : IdentityDbContext<ApplicationUser>
 {
     public KinoContext()
     {
@@ -39,6 +40,7 @@ public partial class KinoContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
