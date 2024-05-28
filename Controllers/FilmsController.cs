@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Kino.Data;
 using Kino.Models;
+using Humanizer;
+using System.Reflection.PortableExecutable;
 
 namespace Kino.Controllers
 {
@@ -63,6 +65,18 @@ namespace Kino.Controllers
             {
                 return NotFound();
             }
+
+           // Filter the seans to only include those with the matching FilmId
+        // var seans = await _context.Seans
+        //.Where(s => s.FilmIdFilm == id)
+        //.ToListAsync();
+
+        //    // Create a ViewModel to pass both Film and its related Seans
+        //    var viewModel = new FilmSeansViewModel
+        //    {
+        //        Film = film,
+        //        SeansList = seans
+        //    };
 
             return View(film);
         }
