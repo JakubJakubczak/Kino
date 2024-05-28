@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace Kino.Models;
 
-public partial class Klient
-{
+public partial class Klient{
     public string Login { get; set; } = null!;
 
     public string Imie { get; set; } = null!;

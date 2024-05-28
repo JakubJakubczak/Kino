@@ -22,21 +22,27 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Films" asp-action="IndexRepertuar">Repertuar</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Rezerwacje</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"  aria-haspopup="false" aria-expanded="false">
-                                <i class="bi bi-gear"></i> Dla pracownika
-                            </a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Rezerwacje</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Pracownik"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"  aria-haspopup="false" aria-expanded="false">
+                                    <i class="bi bi-gear"></i> Dla pracownika
+                                </a>
 
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="Salas" asp-action="Index"><i class="bi bi-camera-reels"></i> Sale</a>
-                                <a class="dropdown-item" asp-controller="Films" asp-action="Index"><i class="bi bi-headset"></i> Filmy</a>
-                                <a class="dropdown-item" asp-controller="Seans" asp-action="Index"><i class="bi bi-headset"></i> Seanse</a>
-                                <a class="dropdown-item" asp-controller="Bilets" asp-action="Index"><i class="bi bi-headset"></i> Bilety</a>
-                            </div>
-                        </li>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Salas" asp-action="Index"><i class="bi bi-camera-reels"></i> Sale</a>
+                                    <a class="dropdown-item" asp-controller="Films" asp-action="Index"><i class="bi bi-headset"></i> Filmy</a>
+                                    <a class="dropdown-item" asp-controller="Seans" asp-action="Index"><i class="bi bi-headset"></i> Seanse</a>
+                                    <a class="dropdown-item" asp-controller="Bilets" asp-action="Index"><i class="bi bi-headset"></i> Bilety</a>
+                                </div>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

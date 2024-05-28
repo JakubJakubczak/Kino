@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Kino.Areas.Identity.Pages.Account;
 using Kino.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace Kino.Data;
 
-public partial class KinoContext : IdentityDbContext<ApplicationUser>
+public partial class KinoContext : IdentityDbContext<IdentityUser>
 {
     public KinoContext()
     {
@@ -18,6 +20,7 @@ public partial class KinoContext : IdentityDbContext<ApplicationUser>
     {
     }
 
+    public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public virtual DbSet<Bilet> Bilets { get; set; }
 
     public virtual DbSet<Film> Films { get; set; }

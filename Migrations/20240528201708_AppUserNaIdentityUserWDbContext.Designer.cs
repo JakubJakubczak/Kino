@@ -4,6 +4,7 @@ using Kino.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kino.Migrations
 {
     [DbContext(typeof(KinoContext))]
-    partial class KinoContextModelSnapshot : ModelSnapshot
+    [Migration("20240528201708_AppUserNaIdentityUserWDbContext")]
+    partial class AppUserNaIdentityUserWDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,13 +173,10 @@ namespace Kino.Migrations
 
             modelBuilder.Entity("Kino.Models.Pracownik", b =>
                 {
-                    b.Property<int>("PracownikId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("PracownikId")
                         .HasMaxLength(50)
-                        .HasColumnType("int")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("Pracownik_Id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PracownikId"));
 
                     b.Property<string>("KlientLogin")
                         .IsRequired()
