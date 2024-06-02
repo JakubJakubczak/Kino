@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Kino.Models.Sala>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Sale";
 }
 
 <h1>Sale</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Stwórz nową sale</a>
 </p>
 <table class="table">
     <thead>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.LiczbaMiejsc)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NumerSali">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.NumerSali">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.NumerSali">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.NumerSali">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.NumerSali">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.NumerSali">Usuń</a>
             </td>
         </tr>
 }

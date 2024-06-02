@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Kino.Models.Film>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Filmy";
 }
 
-<h1>Index</h1>
+<h1>Filmy</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Stwórz nowy</a>
 </p>
 <table class="table">
     <thead>
@@ -55,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.CzasTrwania)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdFilm">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdFilm">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdFilm">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IdFilm">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.IdFilm">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdFilm">Usuń</a>
             </td>
         </tr>
 }
