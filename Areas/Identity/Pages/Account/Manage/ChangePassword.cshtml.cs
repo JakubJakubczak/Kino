@@ -5,10 +5,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Kino.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace Kino.Areas.Identity.Pages.Account.Manage
 {
@@ -17,15 +19,18 @@ namespace Kino.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
+        private readonly KinoContext _context;
 
         public ChangePasswordModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            ILogger<ChangePasswordModel> logger,
+            KinoContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>
@@ -102,6 +107,9 @@ namespace Kino.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await _userManager.GetUserAsync(User);
+            var login = user.UserName; 
+            var klient = _context.Klients.FirstOrDefault(s => s.Login == login);
+           
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -117,6 +125,8 @@ namespace Kino.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            klient.Haslo = Input.NewPassword;
+            await _context.SaveChangesAsync();
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";

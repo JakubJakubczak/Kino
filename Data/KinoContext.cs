@@ -189,5 +189,10 @@ public partial class KinoContext : IdentityDbContext<IdentityUser>
         OnModelCreatingPartial(modelBuilder);
     }
 
+    //internal object FirstOrDefault(Func<object, object> value)
+    //{
+    //    throw new NotImplementedException();
+    //}
+
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

@@ -1,52 +1,41 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using Kino.Data;
-using Kino.Models;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Kino.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Kino.Areas.Identity.Pages.Account;
+using Kino.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace Kino.Areas.Identity.Pages.Account.Manage
 {
-    public class DeletePersonalDataModel : PageModel
+    [Authorize(Roles = "Pracownik")]
+    public class ChangeRoleModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly ILogger<DeletePersonalDataModel> _logger;
-        private readonly KinoContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly KinoContext _context;
 
-        public DeletePersonalDataModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger,
-            KinoContext context,
-            RoleManager<IdentityRole> roleManager)
+        public ChangeRoleModel(UserManager<IdentityUser> userManager,
+                               RoleManager<IdentityRole> roleManager,
+                               KinoContext context)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
-            _context = context;
             _roleManager = roleManager;
+            _context = context;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
+        public IEnumerable<string> AllRoles { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
             /// <summary>
@@ -65,16 +54,9 @@ namespace Kino.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Nowa rola")]
             public string Role { get; set; }
 
-            public IEnumerable<string> AllRoles { get; set; }
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        public bool RequirePassword { get; set; }
-
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -82,7 +64,13 @@ namespace Kino.Areas.Identity.Pages.Account.Manage
                 return NotFound();
             }
 
-            var allRoles = _roleManager.Roles.Select(r => r.Name).ToList();
+            AllRoles = _roleManager.Roles.Select(r => r.Name).ToList();
+
+            //Input = new InputModel
+            //{
+            //    Login = user.UserName,
+            //    AllRoles = allRoles
+            //};
             //var userRoles = await _userManager.GetRolesAsync(user);
             //var allRoles = _roleManager.Roles.Select(r => r.Name).ToList();
 
@@ -105,11 +93,12 @@ namespace Kino.Areas.Identity.Pages.Account.Manage
             {
                 return Page();
             }
-
-            var user = await _userManager.FindByIdAsync(Input.Login);
+            var user = await _userManager.FindByNameAsync(Input.Login);
             if (user == null)
             {
+                ModelState.AddModelError("", "Failed to remove use");
                 return NotFound();
+               
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -127,7 +116,7 @@ namespace Kino.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            if (Input.Role == "Pracownik")
+            if (Input.Role == "Pracownik") 
             {
                 var pracownik = _context.Pracowniks.FirstOrDefault(s => s.KlientLogin == Input.Login);
                 if (pracownik == null) // Nie ma pracownika, wiec dodajemy go

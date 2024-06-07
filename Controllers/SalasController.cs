@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Kino.Data;
 using Kino.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kino.Controllers
 {

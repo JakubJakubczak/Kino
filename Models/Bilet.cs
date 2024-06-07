@@ -15,5 +15,6 @@ public partial class Bilet
     [Display(Name = "Login klienta")]
     public string KlientLogin { get; set; } = null!;
 
+    [Display(Name = "Login klienta")]
     public virtual Klient? KlientLoginNavigation { get; set; } = null!;
 }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Kino.Data;
 using Kino.Models;
 using System.Drawing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kino.Controllers
 {
@@ -47,6 +48,7 @@ namespace Kino.Controllers
         }
 
         // GET: Seans/Create
+
         public IActionResult Create()
         {
             ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "Tytul");
@@ -67,6 +69,20 @@ namespace Kino.Controllers
                 var film = await _context.Films.FindAsync(sean.FilmIdFilm);
                 if (sala != null)
                 {
+                    // Check if the room is available
+                    bool isRoomAvailable = !_context.Seans.Any(s =>
+                        s.SalaNumerSali == sean.SalaNumerSali &&
+                        ((sean.TerminRozpoczecia >= s.TerminRozpoczecia && sean.TerminRozpoczecia < s.TerminZakonczenia) ||
+                         (sean.TerminZakonczenia > s.TerminRozpoczecia && sean.TerminZakonczenia <= s.TerminZakonczenia) ||
+                         (sean.TerminRozpoczecia < s.TerminRozpoczecia && sean.TerminZakonczenia > s.TerminZakonczenia)));
+
+                    if (!isRoomAvailable)
+                    {
+                        ModelState.AddModelError("", "W tym czasie wybrana sala jest niedostępna");
+                        ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "Tytul", sean.FilmIdFilm);
+                        ViewData["SalaNumerSali"] = new SelectList(_context.Salas, "NumerSali", "NumerSali", sean.SalaNumerSali);
+                        return View(sean);
+                    }
                     sean.WolneMiejsca = sala.LiczbaMiejsc;
                 }
                 if (film != null)
@@ -123,6 +139,30 @@ namespace Kino.Controllers
             {
                 try
                 {
+                    var sala = _context.Salas.FirstOrDefault(s => s.NumerSali == sean.SalaNumerSali);
+                    var film = await _context.Films.FindAsync(sean.FilmIdFilm);
+                    if (sala != null)
+                    {
+                        // Check if the room is available
+                        bool isRoomAvailable = !_context.Seans.Any(s =>
+                            s.SalaNumerSali == sean.SalaNumerSali &&
+                            ((sean.TerminRozpoczecia >= s.TerminRozpoczecia && sean.TerminRozpoczecia < s.TerminZakonczenia) ||
+                             (sean.TerminZakonczenia > s.TerminRozpoczecia && sean.TerminZakonczenia <= s.TerminZakonczenia) ||
+                             (sean.TerminRozpoczecia < s.TerminRozpoczecia && sean.TerminZakonczenia > s.TerminZakonczenia)));
+
+                        if (!isRoomAvailable)
+                        {
+                            ModelState.AddModelError("", "W tym czasie wybrana sala jest niedostępna");
+                            ViewData["FilmIdFilm"] = new SelectList(_context.Films, "IdFilm", "Tytul", sean.FilmIdFilm);
+                            ViewData["SalaNumerSali"] = new SelectList(_context.Salas, "NumerSali", "NumerSali", sean.SalaNumerSali);
+                            return View(sean);
+                        }
+                        sean.WolneMiejsca = sala.LiczbaMiejsc;
+                    }
+                    if (film != null)
+                    {
+                        sean.FilmIdFilmNavigation = film;
+                    }
                     _context.Update(sean);
                     await _context.SaveChangesAsync();
                 }

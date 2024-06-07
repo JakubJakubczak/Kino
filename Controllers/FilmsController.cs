@@ -9,9 +9,11 @@ using Kino.Data;
 using Kino.Models;
 using Humanizer;
 using System.Reflection.PortableExecutable;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kino.Controllers
 {
+   
     public class FilmsController : Controller
     {
         private readonly KinoContext _context;
@@ -82,6 +84,7 @@ namespace Kino.Controllers
         }
 
         // GET: Films/Create
+        [Authorize(Roles = "Pracownik")]
         public IActionResult Create()
         {
             return View();
@@ -92,6 +95,7 @@ namespace Kino.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Create([Bind("IdFilm,Tytul,ImieNazwiskoRezysera,RokWydania,KrajProdukcji,Opis,CzasTrwania")] Film film)
         {
             if (ModelState.IsValid)
@@ -104,6 +108,7 @@ namespace Kino.Controllers
         }
 
         // GET: Films/Edit/5
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -124,6 +129,7 @@ namespace Kino.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Edit(int id, [Bind("IdFilm,Tytul,ImieNazwiskoRezysera,RokWydania,KrajProdukcji,Opis,CzasTrwania")] Film film)
         {
             if (id != film.IdFilm)
@@ -155,6 +161,7 @@ namespace Kino.Controllers
         }
 
         // GET: Films/Delete/5
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -175,6 +182,7 @@ namespace Kino.Controllers
         // POST: Films/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var film = await _context.Films.FindAsync(id);

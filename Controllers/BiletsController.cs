@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Kino.Data;
 using Kino.Models;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kino.Controllers
 {
+   
     public class BiletsController : Controller
     {
         private readonly KinoContext _context;
@@ -62,6 +65,20 @@ namespace Kino.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(bilet);
+                var seansId = bilet.SeansIdSeans;
+                var zarezerwowaneMiejsca = bilet.ZarezerwowaneMiejsca;
+
+                var seans = _context.Seans.FirstOrDefault(s => s.IdSeans == seansId);
+                var wolneMiejsca = seans.WolneMiejsca;
+                if(wolneMiejsca < zarezerwowaneMiejsca) 
+                {
+                    ModelState.AddModelError("", "Nie ma tylu wolnych miejsc");
+                    return View(bilet);
+                }
+                else
+                {
+                    seans.WolneMiejsca = seans.WolneMiejsca - zarezerwowaneMiejsca;
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -102,6 +119,25 @@ namespace Kino.Controllers
             {
                 try
                 {
+                    var biletPrzed = await _context.Bilets.FindAsync(id);
+                    var zarezerwowaneMiejscaPrzed = biletPrzed.ZarezerwowaneMiejsca;
+                    _context.Entry(biletPrzed).State = EntityState.Detached;
+                    
+                    var seansId = bilet.SeansIdSeans;
+                    var zarezerwowaneMiejsca = bilet.ZarezerwowaneMiejsca;
+                       
+                    var seans = _context.Seans.FirstOrDefault(s => s.IdSeans == seansId);
+                    var wolneMiejsca = seans.WolneMiejsca;
+                    if (wolneMiejsca < zarezerwowaneMiejsca)
+                    {
+                        ModelState.AddModelError("", "Nie ma tylu wolnych miejsc");
+                        return View(bilet);
+                    }
+                    else
+                    {
+                        seans.WolneMiejsca = seans.WolneMiejsca + zarezerwowaneMiejscaPrzed;
+                        seans.WolneMiejsca = seans.WolneMiejsca - zarezerwowaneMiejsca;
+                    }
                     _context.Update(bilet);
                     await _context.SaveChangesAsync();
                 }
@@ -147,9 +183,13 @@ namespace Kino.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var bilet = await _context.Bilets.FindAsync(id);
+            var seansId = bilet.SeansIdSeans;
+            var seans = _context.Seans.FirstOrDefault(s => s.IdSeans == seansId);
             if (bilet != null)
             {
                 _context.Bilets.Remove(bilet);
+                seans.WolneMiejsca = seans.WolneMiejsca + bilet.ZarezerwowaneMiejsca;
+
             }
 
             await _context.SaveChangesAsync();
