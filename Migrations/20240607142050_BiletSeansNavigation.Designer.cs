@@ -4,6 +4,7 @@ using Kino.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kino.Migrations
 {
     [DbContext(typeof(KinoContext))]
-    partial class KinoContextModelSnapshot : ModelSnapshot
+    [Migration("20240607142050_BiletSeansNavigation")]
+    partial class BiletSeansNavigation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,6 +45,9 @@ namespace Kino.Migrations
                         .HasColumnType("int")
                         .HasColumnName("SeansId_seans");
 
+                    b.Property<int?>("SeansIdSeansNavigationIdSeans")
+                        .HasColumnType("int");
+
                     b.Property<int>("ZarezerwowaneMiejsca")
                         .HasColumnType("int")
                         .HasColumnName("zarezerwowane_miejsca");
@@ -49,7 +55,7 @@ namespace Kino.Migrations
                     b.HasKey("IdBilet")
                         .HasName("PRIMARY");
 
-                    b.HasIndex("SeansIdSeans");
+                    b.HasIndex("SeansIdSeansNavigationIdSeans");
 
                     b.HasIndex(new[] { "KlientLogin" }, "KlientLogin");
 
@@ -480,9 +486,7 @@ namespace Kino.Migrations
 
                     b.HasOne("Kino.Models.Sean", "SeansIdSeansNavigation")
                         .WithMany("Bilets")
-                        .HasForeignKey("SeansIdSeans")
-                        .IsRequired()
-                        .HasConstraintName("FK_bilet_seans_SeansIdSeansNavigationIdSeans");
+                        .HasForeignKey("SeansIdSeansNavigationIdSeans");
 
                     b.Navigation("KlientLoginNavigation");
 

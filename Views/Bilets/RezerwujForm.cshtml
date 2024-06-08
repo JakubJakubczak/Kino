@@ -1,0 +1,58 @@
+﻿@model Kino.Models.Sean
+
+@{
+    ViewData["Title"] = "Seanse";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Rezerwuj bilety</h1>
+
+    @if (TempData["ZbytWieleBiletow"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ZbytWieleBiletow"]
+        </div>
+    }
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Seans Details</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Film</dt>
+                <dd class="col-sm-9">@Model.FilmIdFilmNavigation.Tytul</dd>
+
+                <dt class="col-sm-3">Start</dt>
+                <dd class="col-sm-9">@Model.TerminRozpoczecia.ToString("g")</dd>
+
+                <dt class="col-sm-3">Koniec</dt>
+                <dd class="col-sm-9">@Model.TerminZakonczenia.ToString("g")</dd>
+
+                <dt class="col-sm-3">Dostępne miejsca</dt>
+                <dd class="col-sm-9">@Model.WolneMiejsca</dd>
+            </dl>
+        </div>
+    </div>
+
+    <style>
+        .short-input {
+            width: 100px; /* Adjust the width as needed */
+        }
+    </style>
+
+    <form asp-controller="Bilets" asp-action="RezerwujForm" method="post">
+        <input type="hidden" name="SeansId" asp-for=" @Model.IdSeans" />
+        <div class="form-group">
+            <label for="LiczbaBiletow">Liczba biletów</label>
+            <input type="number" class="form-control short-input" id="LiczbaBiletow" name="LiczbaBiletow" min="1" required />
+        </div>
+        <div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">Potwierdź</button>
+        <a asp-action="Seanse" class="btn btn-secondary">Anuluj</a>
+    </form>
+</div>
+
+<p class="alert alert-warning mt-3">Uwaga: Musisz zapłacić 30 minut przed startem seansu.</p>

@@ -1,45 +1,78 @@
 ﻿@model Kino.Models.Film
 
-<h1>Details</h1>
+@{
+    ViewData["Title"] = "Seanse";
+}
 
-<div class="row">
-    <!-- Left Column -->
-    <div class="col-md-8">
-        <h4>Film</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-3">
-                @Html.DisplayNameFor(model => model.Tytul)
-            </dt>
-            <dd class="col-sm-9">
-                @Html.DisplayFor(model => model.Tytul)
-            </dd>
+<div class="container mt-4">
+    <h1 class="mb-4">@Model.Tytul</h1>
 
-            <dt class="col-sm-3">
-                @Html.DisplayNameFor(model => model.CzasTrwania)
-            </dt>
-            <dd class="col-sm-9">
-                @Html.DisplayFor(model => model.CzasTrwania)
-            </dd>
-        </dl>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (TempData["BrakMiejsc"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["BrakMiejsc"]
+        </div>
+    }
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Film Details</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Tytul)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Tytul)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CzasTrwania)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.CzasTrwania)</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <!-- Right Column -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">Seans List</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var seans in Model.Seans)
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Start:</strong> @seans.TerminRozpoczecia.ToString("g")<br />
+                                        <strong>Koniec:</strong> @seans.TerminZakonczenia.ToString("g")<br />
+                                        <strong>Dostępne miejsca:</strong> @seans.WolneMiejsca
+                                    </div>
+                                    <div>
+                                         <div>
+                                            <form asp-controller="Seans"  asp-action="Rezerwuj" method="post" style="display:inline;">
+                                                <input type="hidden" name="seansId" value="@seans.IdSeans" />
+                                                <button type="submit" class="btn btn-sm btn-primary">Rezerwuj</button>
+                                            </form>
+                                         </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- Right Column -->
-    <div class="col-md-4">
-        <h4>Seans List</h4>
-        <hr />
-        <ul>
-            @foreach (var seans in Model.Seans)
-            {
-                <li>
-                    <strong>Start:</strong> @seans.TerminRozpoczecia <br />
-                    <strong>Koniec:</strong> @seans.TerminZakonczenia <br />
-                    <strong>Dostępne miejsca:</strong> @seans.WolneMiejsca
-                </li>
-            }
-        </ul>
-    </div>
-</div>
 
-<div>
-    <a asp-action="IndexRepertuar">Powrót do listy</a>
+    <div class="mt-3">
+        <a asp-action="IndexRepertuar" class="btn btn-outline-primary">Powrót do listy</a>
+    </div>
 </div>

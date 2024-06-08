@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Kino.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-jcyrS6Erj0B46htc6+DDjo/E3lrm/R+F5x4QqzKloQkFjI4L67uDEmI5q5I1pt9N" crossorigin="anonymous">
 </head>
 <body>
     <header>
@@ -25,7 +26,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Rezerwacje</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Bilets" asp-action="Rezerwacje">Rezerwacje</a>
                             </li>
                         }
                         @if (User.IsInRole("Pracownik"))
@@ -62,6 +63,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-ZvpUoO/+PpHya7QRD7eU2fh8B0l8AdV6aR2aouhNQ6Gmr3JW74Bc3yCOVwr6JO6U" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4/JgggfDWcVHkvHf8sV8fR4pZXK5R3m7mChQd5J6lNr5AW/9Dz37cwg65" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

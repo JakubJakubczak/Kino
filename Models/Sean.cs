@@ -25,4 +25,6 @@ public partial class Sean
     public int SalaNumerSali { get; set; }
 
     public virtual Film? FilmIdFilmNavigation { get; set; } = null!;
+
+    public virtual ICollection<Bilet> Bilets { get; set; } = new List<Bilet>();
 }

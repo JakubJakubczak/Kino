@@ -65,6 +65,12 @@ public partial class KinoContext : IdentityDbContext<IdentityUser>
                 .HasForeignKey(d => d.KlientLogin)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("bilet_ibfk_1");
+
+            entity.HasOne(d => d.SeansIdSeansNavigation)
+               .WithMany(p => p.Bilets)
+               .HasForeignKey(d => d.SeansIdSeans)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_bilet_seans_SeansIdSeansNavigationIdSeans");
         });
 
         modelBuilder.Entity<Film>(entity =>

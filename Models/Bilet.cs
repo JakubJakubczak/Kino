@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace Kino.Models;
 
@@ -17,4 +18,5 @@ public partial class Bilet
 
     [Display(Name = "Login klienta")]
     public virtual Klient? KlientLoginNavigation { get; set; } = null!;
+    public virtual Sean? SeansIdSeansNavigation { get; set; } = null!;
 }

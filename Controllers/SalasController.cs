@@ -21,6 +21,7 @@ namespace Kino.Controllers
         }
 
         // GET: Salas
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Salas.ToListAsync());
@@ -45,6 +46,7 @@ namespace Kino.Controllers
         }
 
         // GET: Salas/Create
+        [Authorize(Roles = "Pracownik")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +57,7 @@ namespace Kino.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Create([Bind("NumerSali,LiczbaMiejsc")] Sala sala)
         {
             if (ModelState.IsValid)
@@ -67,6 +70,7 @@ namespace Kino.Controllers
         }
 
         // GET: Salas/Edit/5
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,6 +91,7 @@ namespace Kino.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Edit(int id, [Bind("NumerSali,LiczbaMiejsc")] Sala sala)
         {
             if (id != sala.NumerSali)
@@ -118,6 +123,7 @@ namespace Kino.Controllers
         }
 
         // GET: Salas/Delete/5
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,6 +144,7 @@ namespace Kino.Controllers
         // POST: Salas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Pracownik")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sala = await _context.Salas.FindAsync(id);
