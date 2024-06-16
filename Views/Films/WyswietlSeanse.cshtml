@@ -20,6 +20,13 @@
             @TempData["BrakMiejsc"]
         </div>
     }
+
+    @if (TempData["PoSeansie"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["PoSeansie"]
+        </div>
+    }
     <div class="row">
         <!-- Left Column -->
         <div class="col-md-8">

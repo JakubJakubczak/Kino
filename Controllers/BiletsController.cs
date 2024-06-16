@@ -326,6 +326,7 @@ namespace Kino.Controllers
                 
             };
 
+
             // sprawdzenie czy ilosc biletow nie przekracza liczby dostepnych miejsc
             var wolneMiejsca = seans.WolneMiejsca;
             if (wolneMiejsca < LiczbaBiletow)

@@ -52,7 +52,14 @@ namespace Kino.Controllers
                 TempData["ErrorMessage"] = "Musisz się zalogować";
                 return RedirectToAction("WyswietlSeanse", "Films", new { id = id });
             }
-            
+
+            // sprawdzenie czy seans jest wcześniej niż aktualna data
+            var now_data = DateTime.Now;
+            if (seans.TerminRozpoczecia < now_data)
+            {
+                TempData["PoSeansie"] = "Za późno by zarezerwować bilet";
+                return RedirectToAction("WyswietlSeanse", "Films", new { id = id });
+            }
 
             var wolneMiejsca = seans.WolneMiejsca;
             if (wolneMiejsca == 0)
